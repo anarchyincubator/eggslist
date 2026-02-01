@@ -1,0 +1,194 @@
+// transitions
+@import  './variables.scss';
+@import  './responsive.scss';
+
+body,
+* {
+  font-family: $font-default !important;
+}
+
+h1 {
+  font-size: 3.75rem;
+  line-height: 4rem;
+  font-weight: 600;
+  margin: 0;
+
+  @include layout-mobile() {
+    font-size: mvw(34px);
+    line-height: mvw(40px);
+  }
+
+}
+h2 {
+  font-size: 2.625rem;
+  line-height: 3rem;
+  font-weight: 600;
+  margin: 0;
+
+  @include layout-mobile() {
+    font-size: mvw(24px);
+    line-height: mvw(32px);
+  }
+}
+
+h3 {
+  font-size: 1.625rem;
+  line-height: 2rem;
+  font-weight: 600;
+  margin: 0;
+
+  @include layout-mobile() {
+    font-size: mvw(18px);
+    line-height: mvw(24px);
+  }
+}
+h4 {
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+
+  @include layout-mobile() {
+    font-size: mvw(16px);
+    line-height: mvw(24px);
+  }
+}
+h5 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  margin: 0;
+
+  @include layout-mobile() {
+    font-size: mvw(16px);
+    line-height: mvw(24px);
+  }
+}
+h6 {
+  font-size: 0.875rem;
+  line-height: 1rem;
+  font-weight: 500;
+  @include layout-mobile() {
+    font-size: mvw(14px);
+    line-height: mvw(16px);
+  }
+}
+
+.body-1 {
+  font-size: 1.25rem;
+  line-height: 2rem;
+  font-weight: 400;
+  margin: 0;
+
+  @include layout-mobile() {
+    font-size: mvw(16px);
+    line-height: mvw(24px);
+  }
+}
+.body-2 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 400;
+  margin: 0;
+
+  @include layout-mobile() {
+    font-size: mvw(16px);
+    line-height: mvw(24px);
+  }
+}
+
+.subtitle-1 {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+
+  @include layout-mobile() {
+    font-size: mvw(16px);
+    line-height: mvw(24px);
+  }
+}
+
+.menu-1 {
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5rem;
+
+  @include layout-mobile() {
+    font-size: mvw(16px);
+    line-height: mvw(24px);
+  }
+}
+
+.button-1 {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+
+  @include layout-mobile() {
+    font-size: mvw(16px);
+    line-height: mvw(32px);
+  }
+}
+
+.button-2 {
+  font-size: 0.875rem;
+  font-weight: bold;
+  line-height: 1rem;
+
+  @include layout-mobile() {
+    font-size: mvw(14px);
+    line-height: mvw(16px);
+  }
+}
+
+.page-container {
+  //padding: 0 12.1875rem;
+  padding: 0 $padding-with-width;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+
+  @include layout-mobile() {
+    padding: 0 mvw(20px);
+    width: auto;
+  }
+
+}
+.search-clear {
+  .input-container__input {
+    @include layout-not-mob() {
+      border: none !important;
+      display: flex;
+      align-items: center;
+      font-size: 1.25rem;
+    }
+  }
+}
+
+#__layout {
+  background: $primary-white;
+}
+a, a:hover, a:focus, a:active {
+  text-decoration: none;
+  color: inherit;
+}
+
+.page-enter-active {
+  transition: all 0.1s ease-out;
+}
+.page-leave-active {
+  transition: all 0.3s;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
+
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}

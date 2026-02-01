@@ -1,0 +1,97 @@
+name: Continuous Integration and Delivery
+
+on:
+  push:
+    branches: [production, development]
+    paths:
+      - "eggslist-backend/**"
+      - "eggslist-frontend/**"
+
+jobs:
+  environment_check:
+    name: Define Environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Current Environment
+        id: branch_check
+        run: |
+          echo "Running on branch ${{ github.ref }}"
+          if [ "${{ github.ref }}" = "refs/heads/production" ]; then
+            echo "env_name=production" >> "$GITHUB_OUTPUT"
+          else
+            echo "env_name=development" >> "$GITHUB_OUTPUT"
+          fi
+    outputs:
+      env_name: ${{ steps.branch_check.outputs.env_name }}
+
+  build_backend:
+    name: Build and Push Backend Image
+    needs: [environment_check]
+    runs-on: ubuntu-latest
+    environment: ${{ needs.environment_check.outputs.env_name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_ACCESS_TOKEN }}
+
+      - name: Log in to DigitalOcean Container Registry
+        run: doctl registry login --expiry-seconds 1200
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          context: ./eggslist-backend
+          file: ./eggslist-backend/Dockerfile
+          tags: |
+            ${{ secrets.DO_DOCKER_IMAGE_NAME }}:${{ github.sha }}
+            ${{ secrets.DO_DOCKER_IMAGE_NAME }}:latest
+
+  build_frontend:
+    name: Build and Push Frontend Image
+    needs: [environment_check]
+    runs-on: ubuntu-latest
+    environment: ${{ needs.environment_check.outputs.env_name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_ACCESS_TOKEN }}
+
+      - name: Log in to DigitalOcean Container Registry
+        run: doctl registry login --expiry-seconds 1200
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          context: ./eggslist-frontend
+          file: ./eggslist-frontend/Dockerfile
+          build-args: |
+            BACKEND_URL=${{ secrets.BACKEND_URL }}
+            OG_IMAGE_URL=${{ secrets.OG_IMAGE_URL }}
+          tags: |
+            ${{ secrets.DO_FRONTEND_IMAGE_NAME }}:${{ github.sha }}
+            ${{ secrets.DO_FRONTEND_IMAGE_NAME }}:latest
+
+  deploy:
+    name: Deploy to DigitalOcean App Platform
+    needs: [build_backend, build_frontend, environment_check]
+    runs-on: ubuntu-latest
+    environment: ${{ needs.environment_check.outputs.env_name }}
+    steps:
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_ACCESS_TOKEN }}
+
+      - name: Deploy updated image
+        run: |
+          doctl apps create-deployment ${{ secrets.DO_APP_ID }} --wait

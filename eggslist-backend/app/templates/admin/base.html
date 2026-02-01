@@ -1,0 +1,57 @@
+{% extends 'admin/base.html' %}
+
+{% block extrastyle %}{{ block.super }}
+<style>
+    :root {
+        --primary: #282220;
+        --secondary: var(--primary);
+        --accent: #F9AA29; 
+        --primary-fg: #FBECD5;
+
+        --body-fg: var(--primary);
+        --body-bg: #FAF2E6;
+        --body-quiet-color: #907A56;
+        --body-loud-color: #F2E2CA;
+
+        --header-color: var(--accent); 
+        --header-branding-color: var(--accent);
+        --header-bg: var(--secondary);
+        --header-link-color: var(--primary-fg);
+
+        --breadcrumbs-fg: #E49006;
+        --breadcrumbs-link-fg: var(--body-bg);
+        --breadcrumbs-bg: var(--primary);
+
+        --link-fg: var(--primary);
+        --link-hover-color: var(--primary) ;
+        --link-selected-fg: var(--accent);
+
+        --hairline-color: #FCF9F2;
+        --border-color: #D5BB91;
+
+        --error-fg: #B00020;
+
+        --message-success-bg: #008738;
+        --message-warning-bg: #FAA614;
+        --message-error-bg: #B00020;
+
+        --darkened-bg: #F2E2CA; /* A bit darker than --body-bg */
+        --selected-bg: #D5BB91; /* E.g. selected table cells */
+        --selected-row: #FCF9F2;
+
+        --button-fg: #FEF3E1;
+        --button-bg: var(--primary);
+        --button-hover-bg: var(--primary);
+        --default-button-bg: var(--secondary);
+        --default-button-hover-bg: #605139;
+        --close-button-bg: #907A56; /* Previously #bbb, contrast 1.92 */
+        --close-button-hover-bg: #907A56;
+        --delete-button-bg: #B00020;
+        --delete-button-hover-bg: #B00020;
+
+        --object-tools-fg: var(--button-fg);
+        --object-tools-bg: var(--close-button-bg);
+        --object-tools-hover-bg: var(--close-button-hover-bg);
+    }
+</style>
+{% endblock %}

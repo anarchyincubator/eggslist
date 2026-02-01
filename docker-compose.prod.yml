@@ -1,0 +1,21 @@
+# Production-like override for local testing.
+# Usage: docker compose -f docker-compose.yml -f docker-compose.prod.yml up
+services:
+  db:
+    restart: unless-stopped
+
+  redis:
+    restart: unless-stopped
+
+  backend:
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=prod
+      - DEBUG=False
+      - ALLOWED_HOSTS=*
+      - USE_S3=False
+      - DB_HOST=db
+      - REDIS_URL=redis://redis:6379/0
+
+  frontend:
+    restart: unless-stopped

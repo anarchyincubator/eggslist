@@ -1,0 +1,31 @@
+/* Responsive Breakpoints */
+
+//$breakpoint-mobile: 729px;
+$breakpoint-mobile: 860px;
+$breakpoint-laptop-s: 1000px;
+$breakpoint-laptop-l: 1480px;
+$breakpoint-laptop: 1290px;
+
+$padding-left-mobile: mvw(20px);
+$padding-left: vw(195px);
+$padding-with-width: calc((100vw - 80.625rem) / 2);
+
+$primary-marigold: #F9AA29;
+$primary-marigold-dark: #E49006;
+$primary-brown: #9E725C;
+$primary-white: #FEF3E1;
+$primary-cream: #FBECD5;
+$primary-black: #282220;
+$primary-red: #EE3724;
+$primary-sky: #9DDAF7;
+$error: #B00020;
+$neutral-70:#D5BB91;
+$neutral-45:#907A56;
+$neutral-30: #605139;
+
+$secondary-marigold: #DF8D06;
+$secondary-white: #FFF9F0;
+
+
+// font
+$font-default: 'Poppins', sans-serif;

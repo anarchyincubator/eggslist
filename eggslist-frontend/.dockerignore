@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.nuxt/
+.git
+.env
+.env.*
+*.log
+npm-debug.log*
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
