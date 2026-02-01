@@ -5,7 +5,7 @@
     :class="{ 'navbar-container--opened': opened }"
   >
     <div class="navbar-container__top">
-      <img src="@/assets/images/icons/logo_dark.svg" @click="handleGoMain" />
+      <img :src="logoLink" @click="handleGoMain" />
       <TheHamburger v-model="opened" />
     </div>
     <div v-if="opened" class="navbar-container-opened">
@@ -87,6 +87,9 @@ export default {
     };
   },
   computed: {
+    logoLink() {
+      return this.$store.getters["branding/logo"] || require("@/assets/images/icons/logo_dark.svg");
+    },
     isAuthenticated() {
       return this.$store.getters["auth/isAuthenticated"];
     },

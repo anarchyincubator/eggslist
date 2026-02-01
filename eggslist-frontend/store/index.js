@@ -58,6 +58,7 @@ export const actions = {
   },
   async nuxtClientInit({ dispatch, commit, state }, { app }) {
     dispatch("getCities");
+    dispatch("branding/fetchBranding");
     const token = localStorage.getItem(localStorageKeyAuth);
     await dispatch("getLocate");
     commit("setCookies", Boolean(localStorage.getItem(localStorageCookies)));

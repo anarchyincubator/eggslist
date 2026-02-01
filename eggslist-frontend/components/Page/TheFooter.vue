@@ -8,7 +8,7 @@
           <div>
             <h2>Join The Movement!</h2>
             <div class="body-1">
-              Sign up start buying and selling local food with Egglist!
+              {{ ctaText }}
             </div>
           </div>
           <CustomButton
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="footer__top">
-        <img class="footer__logo" src="@/assets/images/icons/logo.svg" />
+        <img class="footer__logo" :src="logoLink" />
         <div class="footer__top-center">
           <div class="footer__top-center--first">
             <nuxt-link to="/catalog">Market</nuxt-link>
@@ -56,7 +56,7 @@
         </div>
       </div>
       <div class="footer__bottom">
-        <span>© 2022 Eggslist. All rights reserved.</span>
+        <span>&copy; {{ new Date().getFullYear() }} {{ copyrightText }}</span>
         <div class="footer__bottom-right">
           <nuxt-link to="/terms">Terms of Service</nuxt-link>
           <nuxt-link to="/privacy">Privacy Policy</nuxt-link>
@@ -87,6 +87,17 @@ export default {
     quotes: {
       type: Array,
       default: () => [],
+    },
+  },
+  computed: {
+    logoLink() {
+      return this.$store.getters["branding/logo"] || require("@/assets/images/icons/logo.svg");
+    },
+    copyrightText() {
+      return this.$store.getters["branding/copyrightText"];
+    },
+    ctaText() {
+      return this.$store.getters["branding/ctaText"];
     },
   },
   methods: {

@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div class="header-container">
-      <h1>Find Farmers Near You</h1>
+      <h1>{{ tagline }}</h1>
       <SearchCity
         :cities="cities"
         class="header-container__search"
@@ -59,6 +59,9 @@ export default {
     };
   },
   computed: {
+    tagline() {
+      return this.$store.getters["branding/tagline"];
+    },
     categories() {
       return this.$store.getters["categories/categories"];
     },

@@ -1,9 +1,14 @@
+from django.core.cache import cache
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.filters import SearchFilter
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from eggslist.site_configuration import filters, models
 from eggslist.site_configuration.api import serializers
+from eggslist.site_configuration.models import BRANDING_CACHE_KEY
 from eggslist.utils.views.mixins import CacheListAPIMixin
 
 
@@ -42,3 +47,16 @@ class FAQListAPIView(generics.ListAPIView):
 class TeamMemberAPIView(generics.ListAPIView):
     serializer_class = serializers.TeamMemberSerializer
     queryset = models.TeamMember.objects.all()
+
+
+class SiteBrandingAPIView(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        cached = cache.get(BRANDING_CACHE_KEY)
+        if cached is not None:
+            return Response(cached)
+        branding = models.SiteBranding.get_solo()
+        data = serializers.SiteBrandingSerializer(branding, context={"request": request}).data
+        cache.set(BRANDING_CACHE_KEY, data, 3600)
+        return Response(data)

@@ -11,26 +11,38 @@ Eggslist is a virtual farmer's market web application connecting local farmers/g
 
 ## Common Commands
 
-### Backend (`eggslist-backend/`)
+### Docker (primary workflow, from repo root)
 
 ```bash
-# Run development server
-python manage.py runserver
+make setup           # Interactive first-boot: creates .env, starts stack, waits for health
+make up              # Build and start all services (foreground)
+make down            # Stop all services
+make clean           # Stop all services and delete volumes (full reset)
+make logs            # Tail logs from all services
+make migrate         # Run Django migrations in the running backend container
+make makemigrations  # Generate new migration files
+make test            # Run backend test suite
+make shell           # Django shell in backend container
+make bash            # Bash shell in backend container
+make lint            # Run black, isort, flake8 checks
+make format          # Auto-format backend code with black and isort
+make frontend-shell  # Shell in frontend container
+```
 
-# Database migrations
+### Backend (`eggslist-backend/`, without Docker)
+
+```bash
+python manage.py runserver
 python manage.py makemigrations
 python manage.py migrate
-
-# Formatting and linting (pre-commit hooks run isort + black automatically)
+python manage.py collectstatic --noinput
 black .
 isort .
 flake8 .
-
-# Run tests
 python manage.py test
 ```
 
-### Frontend (`eggslist-frontend/`)
+### Frontend (`eggslist-frontend/`, without Docker)
 
 ```bash
 npm install
@@ -98,6 +110,11 @@ Examples: `Feat: #24 -- Implement Google and Facebook auth`, `Fix: Location Cook
 
 ## Environment Setup
 
-Backend requires: GDAL library, PostgreSQL with PostGIS, Redis, `.env` file (see backend README for required vars), `app/settings/local.py` (copy from `local-example.py`).
+**Docker (recommended):** Run `make setup` from the repo root. It prompts for admin credentials, generates `eggslist-backend/.env` from `.env.example`, and brings up all services. The backend entrypoint automatically runs migrations, `collectstatic`, and starts Gunicorn. First boot is slow (~5 min) due to the GIS zip code data migration.
 
-Frontend requires: `BACKEND_URL` env var pointing to the API server.
+**Without Docker:** Backend requires GDAL library, PostgreSQL with PostGIS, Redis, `.env` file (see `.env.example`), and `app/settings/local.py` (copy from `local-example.py`). Frontend requires `BACKEND_URL` env var pointing to the API server.
+
+## Key Migration Notes
+
+- `users/migrations/0009_create_superuser.py` — Creates an admin user from `DJANGO_SUPERUSER_EMAIL`/`DJANGO_SUPERUSER_PASSWORD` env vars. Idempotent: skips if vars are empty or user already exists.
+- `site_configuration/migrations/0002_add_locations.py` and `0009_readd_locations.py` — Load ~40k US zip codes with PostGIS coordinates from a bundled CSV. This is the slow part of first boot.

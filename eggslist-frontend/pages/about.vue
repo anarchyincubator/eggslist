@@ -3,9 +3,7 @@
     <div class="header-container">
       <h1>About</h1>
       <div class="body-1">
-        Egglist is your virtual Farmer’s Market, where you can buy, sell, and
-        connect with local farmers and gardeners to keep your food fresh and
-        local!
+        {{ siteDescription }}
       </div>
       <PatternTop color="#FEF3E1" class="header-container__bottom" />
     </div>
@@ -72,7 +70,11 @@ export default {
       loadingQuestions: true,
     };
   },
-  computed: {},
+  computed: {
+    siteDescription() {
+      return this.$store.getters["branding/siteDescription"];
+    },
+  },
 
   async mounted() {
     try {

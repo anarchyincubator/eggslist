@@ -59,7 +59,7 @@
           <div class="auth-profile__info">
             <h3>Confirm your email</h3>
             <span class="body-1"
-              >Confirm your email to access full Eggslist functionality.</span
+              >Confirm your email to access full {{ siteName }} functionality.</span
             >
             <CustomButton
               v-if="!sendVerify"
@@ -134,6 +134,9 @@ export default {
     };
   },
   computed: {
+    siteName() {
+      return this.$store.getters["branding/siteName"];
+    },
     user() {
       return this.$store.getters["user/user"];
     },

@@ -2,7 +2,7 @@
   <div class="reset">
     <h1>Reset Your Password</h1>
     <div v-if="sent" class="reset__sent body-1">
-      Your Eggslist Password has been changed.
+      Your {{ siteName }} Password has been changed.
       <a @click="handleSign"> Sign In</a>
     </div>
     <div v-else class="reset__form">
@@ -52,6 +52,11 @@ export default {
     code: {
       type: String,
       required: true,
+    },
+  },
+  computed: {
+    siteName() {
+      return this.$store.getters["branding/siteName"];
     },
   },
   data() {

@@ -4,8 +4,8 @@
       <div class="header-container__body">
         <h1>Our Stories</h1>
         <div class="body-1">
-          Dive into the world of Brand. Explore insights. And stay up to date
-          with product and company news.
+          Dive into the world of {{ siteName }}. Explore insights. And stay up
+          to date with product and company news.
         </div>
       </div>
       <PatternTop class="header-container__bottom" />
@@ -106,6 +106,9 @@ export default {
     };
   },
   computed: {
+    siteName() {
+      return this.$store.getters["branding/siteName"];
+    },
     isMobile() {
       return this.$store.getters["isMobile"];
     },

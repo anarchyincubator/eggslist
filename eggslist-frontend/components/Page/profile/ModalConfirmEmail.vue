@@ -3,7 +3,7 @@
     <div class="modal">
       <h2>Confirm your email</h2>
       <span class="body-1">
-        Confirm your email to access full Eggslist functionality.
+        Confirm your email to access full {{ siteName }} functionality.
       </span>
       <CustomButton
         v-if="!sendVerify"
@@ -25,6 +25,11 @@ export default {
   name: "ModalConfirmEmail",
   components: { ModalSimple, CustomButton },
   emits: ["send"],
+  computed: {
+    siteName() {
+      return this.$store.getters["branding/siteName"];
+    },
+  },
   data() {
     return {
       loadingButton: false,

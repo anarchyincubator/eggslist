@@ -20,7 +20,6 @@ urlpatterns = [
     path("ckeditor5/", include("django_ckeditor_5.urls")),
 ]
 
-admin.site.site_header = "Eggslist Admin"
 if settings.DEBUG:
     urlpatterns += static.static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

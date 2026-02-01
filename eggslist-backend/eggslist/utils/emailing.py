@@ -7,13 +7,16 @@ User = get_user_model()
 
 
 def send_mailing(subject, mail_template, mail_object=None, users=None, email_addresses=None):
+    from eggslist.site_configuration.models import SiteBranding
+
     emails = []
 
     email_addresses = email_addresses if email_addresses else [user.email for user in users]
     send_to_users = bool(users)
+    site_name = SiteBranding.get_solo().site_name
 
     for i, email_address in enumerate(email_addresses):
-        context = {"obj": mail_object or {}, "base_url": settings.SITE_URL}
+        context = {"obj": mail_object or {}, "base_url": settings.SITE_URL, "site_name": site_name}
 
         if send_to_users:
             context.update(user=users[i])

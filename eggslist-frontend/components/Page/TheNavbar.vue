@@ -80,7 +80,11 @@ export default {
     user() {
       return this.$store.getters["user/user"];
     },
+    brandingLogo() {
+      return this.$store.getters["branding/logo"];
+    },
     logoLink() {
+      if (this.brandingLogo) return this.brandingLogo;
       return !this.isUserScrolling && !this.isStatic ? logo : logoDark;
     },
     likeLink() {

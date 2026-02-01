@@ -55,8 +55,13 @@ class EmailCodeVerification:
         code = cls.generate_code(email=email)
         user_code_link = f"{settings.SITE_URL}/{cls.link_endpoint}?{cls.link_param_key}={code}"
 
+        from eggslist.site_configuration.models import SiteBranding
+
+        site_name = SiteBranding.get_solo().site_name
+        subject = cls.mail_subject.replace("Eggslist", site_name)
+
         send_mailing(
-            subject=cls.mail_subject,
+            subject=subject,
             mail_template=cls.mail_template,
             mail_object={"user_code_link": user_code_link},
             users=[user],

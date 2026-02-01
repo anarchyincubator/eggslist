@@ -78,8 +78,11 @@ class StripeWebhooks(APIView):
             )
             seller_email = transaction.seller.email
             seller_name = transaction.seller.first_name
+            from eggslist.site_configuration.models import SiteBranding
+
+            site_name = SiteBranding.get_solo().site_name
             send_mailing(
-                subject="Eggslist Notification: Sale!",
+                subject=f"{site_name} Notification: Sale!",
                 mail_template="emails/stripe_purchase_seller.html",
                 mail_object={
                     "website_profile_url": f"{settings.SITE_URL}/profile",
@@ -93,7 +96,7 @@ class StripeWebhooks(APIView):
 
             if customer_email is not None:
                 send_mailing(
-                    subject="Eggslist Notification: Purchase!",
+                    subject=f"{site_name} Notification: Purchase!",
                     mail_template="emails/stripe_purchase_buyer.html",
                     email_addresses=[customer_email],
                     mail_object={

@@ -1,8 +1,12 @@
 from django.contrib.gis.db import models as gis_models
+from django.core.cache import cache
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
+from solo.models import SingletonModel
 
 from eggslist.utils.models import NameSlugModel, _SlugModelMixin
 
@@ -135,3 +139,59 @@ class TeamMember(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+
+class SiteBranding(SingletonModel):
+    site_name = models.CharField(
+        verbose_name=_("site name"), max_length=128, default="Eggslist"
+    )
+    tagline = models.CharField(
+        verbose_name=_("tagline"), max_length=256, default="Find Farmers Near You"
+    )
+    site_description = models.TextField(
+        verbose_name=_("site description"),
+        default=(
+            "Your virtual Farmer's Market, where you can buy, sell, and connect"
+            " with local farmers and gardeners to keep your food fresh and local!"
+        ),
+    )
+    primary_color = models.CharField(
+        verbose_name=_("primary color (hex)"), max_length=7, default="#D4A843"
+    )
+    logo = ProcessedImageField(
+        verbose_name=_("logo"),
+        upload_to="branding",
+        processors=[ResizeToFill(400, 400)],
+        format="PNG",
+        options={"quality": 90},
+        blank=True,
+        null=True,
+    )
+    favicon = models.FileField(
+        verbose_name=_("favicon"), upload_to="branding", blank=True, null=True
+    )
+    copyright_text = models.CharField(
+        verbose_name=_("copyright text"),
+        max_length=256,
+        default="Eggslist. All rights reserved.",
+    )
+    cta_text = models.CharField(
+        verbose_name=_("call-to-action text"),
+        max_length=256,
+        default="Sign up to start buying and selling local food!",
+    )
+
+    class Meta:
+        verbose_name = _("site branding")
+        verbose_name_plural = _("site branding")
+
+    def __str__(self):
+        return self.site_name
+
+
+BRANDING_CACHE_KEY = "site_branding_api"
+
+
+@receiver(post_save, sender=SiteBranding)
+def clear_branding_cache(sender, **kwargs):
+    cache.delete(BRANDING_CACHE_KEY)

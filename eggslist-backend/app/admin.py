@@ -3,6 +3,16 @@ from django.contrib.admin.apps import AdminConfig
 
 
 class EggslistAdminSite(admin.AdminSite):
+    @property
+    def site_header(self):
+        from eggslist.site_configuration.models import SiteBranding
+
+        return f"{SiteBranding.get_solo().site_name} Admin"
+
+    @site_header.setter
+    def site_header(self, value):
+        pass
+
     def get_app_list(self, request):
         """
         Return a sorted list of all the installed apps that have been
@@ -26,6 +36,7 @@ class EggslistAdminSite(admin.AdminSite):
             "Testimonial": 5,
             "TeamMember": 6,
             "FAQ": 7,
+            "SiteBranding": 8,
             "Group": 1,
         }
         apps_ordering = {"store": 1, "blogs": 2, "users": 3, "site_configuration": 4, "auth": 5}

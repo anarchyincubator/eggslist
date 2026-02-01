@@ -47,3 +47,18 @@ class TeamMemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TeamMember
         fields = ("first_name", "last_name", "image", "job_title")
+
+
+class SiteBrandingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SiteBranding
+        fields = (
+            "site_name",
+            "tagline",
+            "site_description",
+            "primary_color",
+            "logo",
+            "favicon",
+            "copyright_text",
+            "cta_text",
+        )

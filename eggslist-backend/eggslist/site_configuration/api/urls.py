@@ -12,5 +12,6 @@ urlpatterns = [
     path("testimonials", views.TestimonialListAPIView.as_view(), name="testimonials"),
     path("about/faqs", views.FAQListAPIView.as_view(), name="about-faqs"),
     path("about/team-members", views.TeamMemberAPIView.as_view(), name="about-team-members"),
+    path("branding", views.SiteBrandingAPIView.as_view(), name="branding"),
 ]
 # fmt: on

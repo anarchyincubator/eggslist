@@ -1,5 +1,6 @@
 from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
+from solo.admin import SingletonModelAdmin
 
 from eggslist.site_configuration import models
 from eggslist.utils.admin import ImageAdmin
@@ -50,3 +51,25 @@ class FAQAdmin(SortableAdminMixin, admin.ModelAdmin):
 class TeamMemberAdmin(SortableAdminMixin, ImageAdmin):
     list_display = ("position", "first_name", "last_name", "job_title")
     list_display_images = ("image",)
+
+
+@admin.register(models.SiteBranding)
+class SiteBrandingAdmin(SingletonModelAdmin):
+    fieldsets = (
+        (
+            "Text",
+            {
+                "fields": (
+                    "site_name",
+                    "tagline",
+                    "site_description",
+                    "copyright_text",
+                    "cta_text",
+                )
+            },
+        ),
+        (
+            "Visuals",
+            {"fields": ("primary_color", "logo", "favicon")},
+        ),
+    )

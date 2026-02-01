@@ -120,6 +120,11 @@ export default {
     },
   },*/
 
+  server: {
+    host: "0.0.0.0",
+    port: 80,
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 };
