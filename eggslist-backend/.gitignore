@@ -76,3 +76,4 @@ htmlcov/
 nosetests.xml
 coverage.xml
 .env*
+!.env.example

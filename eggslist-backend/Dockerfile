@@ -22,7 +22,7 @@ RUN groupadd -r app && useradd -r -g app -d /home/app -s /sbin/nologin app
 
 ENV HOME=/home/app
 ENV APP_HOME=/home/app/web
-RUN mkdir -p $APP_HOME/data/static $APP_HOME/data/media
+RUN mkdir -p $APP_HOME/data/static $APP_HOME/data/media $HOME/data/static $HOME/data/media
 WORKDIR $APP_HOME
 
 # Install Python dependencies
@@ -36,7 +36,8 @@ COPY . $APP_HOME
 # Fix entrypoint line endings and permissions
 RUN sed -i 's/\r$//g' $APP_HOME/entrypoint.sh && \
     chmod +x $APP_HOME/entrypoint.sh && \
-    chown -R app:app $APP_HOME
+    chown -R app:app $APP_HOME && \
+    chown -R app:app $HOME/data
 
 USER app
 

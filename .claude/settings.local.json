@@ -3,7 +3,13 @@
     "allow": [
       "Bash(wc:*)",
       "Bash(grep:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(find:*)",
+      "Bash(docker:*)",
+      "Bash(docker compose:*)",
+      "Bash(sudo ss:*)",
+      "Bash(ss:*)",
+      "Bash(curl:*)"
     ]
   }
 }

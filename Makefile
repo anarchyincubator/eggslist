@@ -1,7 +1,7 @@
 # Makefile for common Eggslist development operations.
 # Wraps docker compose commands for convenience.
 
-.PHONY: up down logs migrate makemigrations test shell bash lint format frontend-shell clean
+.PHONY: up down logs migrate makemigrations test shell bash lint format frontend-shell clean setup
 
 up:
 	docker compose up --build
@@ -41,3 +41,6 @@ frontend-shell:
 
 clean:
 	docker compose down -v
+
+setup:
+	bash setup.sh
