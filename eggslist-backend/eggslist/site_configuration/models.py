@@ -141,6 +141,62 @@ class TeamMember(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 
+COLOR_SCHEME_PRESETS = {
+    "classic": {
+        "primary": "#F9AA29",
+        "primary_dark": "#E49006",
+        "background": "#FEF3E1",
+        "background_light": "#FBECD5",
+        "text": "#282220",
+    },
+    "ocean": {
+        "primary": "#42A5F5",
+        "primary_dark": "#2196F3",
+        "background": "#E3F2FD",
+        "background_light": "#BBDEFB",
+        "text": "#0D253B",
+    },
+    "forest": {
+        "primary": "#66BB6A",
+        "primary_dark": "#43A047",
+        "background": "#E8F5E9",
+        "background_light": "#C8E6C9",
+        "text": "#1B2E1B",
+    },
+    "berry": {
+        "primary": "#F06292",
+        "primary_dark": "#EC407A",
+        "background": "#FCE4EC",
+        "background_light": "#F8BBD0",
+        "text": "#3E1929",
+    },
+    "slate": {
+        "primary": "#90A4AE",
+        "primary_dark": "#78909C",
+        "background": "#ECEFF1",
+        "background_light": "#CFD8DC",
+        "text": "#263238",
+    },
+    "relief": {
+        "primary": "#4DB6AC",
+        "primary_dark": "#26A69A",
+        "background": "#E0F2F1",
+        "background_light": "#B2DFDB",
+        "text": "#1A2E2B",
+    },
+}
+
+COLOR_SCHEME_CHOICES = [
+    ("classic", _("Classic (warm gold)")),
+    ("ocean", _("Ocean (blue)")),
+    ("forest", _("Forest (green)")),
+    ("berry", _("Berry (raspberry)")),
+    ("slate", _("Slate (gray)")),
+    ("relief", _("Relief (teal)")),
+    ("custom", _("Custom")),
+]
+
+
 class SiteBranding(SingletonModel):
     site_name = models.CharField(
         verbose_name=_("site name"), max_length=128, default="Eggslist"
@@ -157,6 +213,42 @@ class SiteBranding(SingletonModel):
     )
     primary_color = models.CharField(
         verbose_name=_("primary color (hex)"), max_length=7, default="#D4A843"
+    )
+    color_scheme = models.CharField(
+        verbose_name=_("color scheme"),
+        max_length=16,
+        choices=COLOR_SCHEME_CHOICES,
+        default="classic",
+    )
+    custom_primary = models.CharField(
+        verbose_name=_("custom primary color"),
+        max_length=7,
+        blank=True,
+        default="",
+    )
+    custom_primary_dark = models.CharField(
+        verbose_name=_("custom primary dark color"),
+        max_length=7,
+        blank=True,
+        default="",
+    )
+    custom_background = models.CharField(
+        verbose_name=_("custom background color"),
+        max_length=7,
+        blank=True,
+        default="",
+    )
+    custom_background_light = models.CharField(
+        verbose_name=_("custom background light color"),
+        max_length=7,
+        blank=True,
+        default="",
+    )
+    custom_text = models.CharField(
+        verbose_name=_("custom text color"),
+        max_length=7,
+        blank=True,
+        default="",
     )
     logo = ProcessedImageField(
         verbose_name=_("logo"),
@@ -187,6 +279,19 @@ class SiteBranding(SingletonModel):
 
     def __str__(self):
         return self.site_name
+
+    def get_colors(self):
+        if self.color_scheme == "custom":
+            return {
+                "primary": self.custom_primary or "#F9AA29",
+                "primary_dark": self.custom_primary_dark or "#E49006",
+                "background": self.custom_background or "#FEF3E1",
+                "background_light": self.custom_background_light or "#FBECD5",
+                "text": self.custom_text or "#282220",
+            }
+        return COLOR_SCHEME_PRESETS.get(
+            self.color_scheme, COLOR_SCHEME_PRESETS["classic"]
+        )
 
 
 BRANDING_CACHE_KEY = "site_branding_api"

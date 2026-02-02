@@ -3,3 +3,11 @@
 @import  './scaffolding.scss';
 @import  './fonts.scss';
 @import  './helpers.scss';
+
+:root {
+  --brand-primary: #F9AA29;
+  --brand-primary-dark: #E49006;
+  --brand-background: #FEF3E1;
+  --brand-background-light: #FBECD5;
+  --brand-text: #282220;
+}

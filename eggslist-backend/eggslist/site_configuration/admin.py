@@ -1,9 +1,20 @@
 from adminsortable2.admin import SortableAdminMixin
+from django import forms
 from django.contrib import admin
 from solo.admin import SingletonModelAdmin
 
 from eggslist.site_configuration import models
 from eggslist.utils.admin import ImageAdmin
+
+
+class ColorInput(forms.TextInput):
+    input_type = "color"
+
+    def format_value(self, value):
+        # Return None/empty as empty string so the picker doesn't break
+        if not value:
+            return "#000000"
+        return value
 
 
 @admin.register(models.LocationCountry)
@@ -53,8 +64,22 @@ class TeamMemberAdmin(SortableAdminMixin, ImageAdmin):
     list_display_images = ("image",)
 
 
+class SiteBrandingForm(forms.ModelForm):
+    class Meta:
+        model = models.SiteBranding
+        fields = "__all__"
+        widgets = {
+            "custom_primary": ColorInput,
+            "custom_primary_dark": ColorInput,
+            "custom_background": ColorInput,
+            "custom_background_light": ColorInput,
+            "custom_text": ColorInput,
+        }
+
+
 @admin.register(models.SiteBranding)
 class SiteBrandingAdmin(SingletonModelAdmin):
+    form = SiteBrandingForm
     fieldsets = (
         (
             "Text",
@@ -70,6 +95,30 @@ class SiteBrandingAdmin(SingletonModelAdmin):
         ),
         (
             "Visuals",
-            {"fields": ("primary_color", "logo", "favicon")},
+            {"fields": ("logo", "favicon")},
+        ),
+        (
+            "Color Scheme",
+            {"fields": ("color_scheme",)},
+        ),
+        (
+            "Custom Colors",
+            {
+                "classes": ("collapse",),
+                "description": (
+                    "These fields are only used when Color Scheme is set"
+                    ' to "Custom".'
+                ),
+                "fields": (
+                    "custom_primary",
+                    "custom_primary_dark",
+                    "custom_background",
+                    "custom_background_light",
+                    "custom_text",
+                ),
+            },
         ),
     )
+
+    class Media:
+        js = ("admin/js/color_scheme_toggle.js",)
